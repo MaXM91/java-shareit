@@ -11,7 +11,9 @@ public interface UserStorage {
 
     List<User> get();
 
-    User update(long userId, User user);
+    boolean checkUserByEmail(String userEmail);
 
-    void delete(User user);
+    User update(User user);
+
+    void delete(String email);
 }

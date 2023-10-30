@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.User;
@@ -14,6 +15,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     UserStorage userStorage;
 
+    @Autowired
     UserServiceImpl(UserMapper userMapper,
                     @Qualifier("UserStorageImpl") UserStorage userStorage) {
         this.userMapper = userMapper;
@@ -33,6 +35,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return null;
+    }
+
+    public boolean getUserByEmail(String userEmail) {
+        return true;
     }
 
     @Override

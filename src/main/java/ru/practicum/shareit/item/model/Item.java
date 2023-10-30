@@ -5,6 +5,7 @@ import lombok.Data;
 import ru.practicum.shareit.request.ItemRequest;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 /**
@@ -13,13 +14,19 @@ import javax.validation.constraints.Positive;
 @Data
 @AllArgsConstructor
 public class Item {
-    private final long id;
-    @NotBlank
+    private long id;
+
+    @NotBlank(message = "blank/empty name")
     private String name;
-    @NotBlank
+
+    @NotBlank(message = "blank/empty description")
     private String description;
-    private Boolean isAvailable;
-    @Positive
+
+    @NotNull(message = "availability must be true/false")
+    private Boolean available;
+
+    @Positive(message = "ownerId must be > 0")
     private long ownerId;
+
     private ItemRequest request;
 }

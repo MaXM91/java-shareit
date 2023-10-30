@@ -1,8 +1,6 @@
 package ru.practicum.shareit.user;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,22 +11,22 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * TODO Sprint add-controllers.
+ * Controller for work with User entity.
  */
 @Validated
 @Slf4j
 @RestController
 @RequestMapping(path = "/users")
-@RequiredArgsConstructor
 public class UserController {
-
     UserService userService;
 
-    @Autowired
     UserController(@Qualifier("InMemoryUserService") UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Create user and return him.
+     */
     @PostMapping
     public User addUser(@Valid @RequestBody UserDto userDto) {
         log.info("request POST/addUser : {}", userDto);
@@ -39,6 +37,10 @@ public class UserController {
         return responseObject;
     }
 
+    /**
+     * @param userId
+     * @return user by userId.
+     */
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable int userId) {
         log.info("request GET/getUserById : {}", userId);
@@ -49,6 +51,9 @@ public class UserController {
         return responseObject;
     }
 
+    /**
+     * @return all users.
+     */
     @GetMapping
     public List<User> getAllUsers() {
         log.info("request GET/addAllUsers");
@@ -59,8 +64,13 @@ public class UserController {
         return responseObject;
     }
 
+    /**
+     * @param userId
+     * @param userDto
+     * @return updated user.
+     */
     @PatchMapping("/{userId}")
-    public User update(@Valid @PathVariable long userId, @RequestBody UserDto userDto) {
+    public User update(@PathVariable long userId, @RequestBody UserDto userDto) {
         log.info("request PATCH/update : {}, {}", userId, userDto);
 
         User responseObject = userService.update(userId, userDto);
@@ -69,8 +79,13 @@ public class UserController {
         return responseObject;
     }
 
+    /**
+     * delete user bu userId.
+     *
+     * @param userId
+     */
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable int userId) {
+    public void deleteUser(@PathVariable long userId) {
         log.info("request DELETE/userId : {}", userId);
 
         userService.delete(userId);

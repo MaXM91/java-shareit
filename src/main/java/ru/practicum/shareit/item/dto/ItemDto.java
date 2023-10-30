@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO Sprint add-controllers.
@@ -11,9 +12,14 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class ItemDto {
-    @NotBlank
+    private long id;
+
+    @NotBlank(message = "blank/empty name")
     private String name;
-    @NotBlank
+
+    @NotBlank(message = "blank/empty description")
     private String description;
-    private Boolean isAvailable;
+
+    @NotNull(message = "availability must be true/false")
+    private Boolean available;
 }

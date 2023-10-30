@@ -18,6 +18,10 @@ public interface UserService {
         return null;
     }
 
+    default boolean getUserByEmail(String userEmail) {
+        return true;
+    }
+
     default User update(long userId, UserDto userDto) {
         return null;
     }
