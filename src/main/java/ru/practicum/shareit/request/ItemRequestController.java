@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,6 @@ import ru.practicum.shareit.request.service.ItemRequestService;
 public class ItemRequestController {
     ItemRequestService itemRequestService;
 
-    @Autowired
     ItemRequestController(@Qualifier("InMemoryItemRequestService") ItemRequestService itemRequestService) {
         this.itemRequestService = itemRequestService;
     }
