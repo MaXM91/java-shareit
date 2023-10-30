@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.validation.exception.EmailRegisteredException;
 import ru.practicum.shareit.validation.exception.ErrorResponse;
 import ru.practicum.shareit.validation.exception.ObjectNotFoundException;
+import ru.practicum.shareit.validation.exception.ValidateException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -32,6 +33,14 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)                                    // 404
+    public ErrorResponse validationPartOfBody(final ValidateException exc) {
+        getLog(exc.getStackTrace(), exc.getMessage());
+        return new ErrorResponse(getClassStartException(exc.getStackTrace()) + "/" +
+                getMethodStartException(exc.getStackTrace()) + exc.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
     public ErrorResponse badSBValidationUpLevelController(final ConstraintViolationException exc) {
         getLog(exc.getStackTrace(), exc.getMessage());
@@ -48,14 +57,14 @@ public class ErrorHandler {
     }
 
     private String getClassStartException(StackTraceElement[] methods) {
-        return methods[3].toString();
+        return methods[3].getClassName();
     }
 
     private String getMethodStartException(StackTraceElement[] methods) {
-        return methods[2].toString();
+        return methods[2].getMethodName();
     }
 
     private void getLog(StackTraceElement[] methods, String message) {
-        log.info(methods[3].toString() + "/" + methods[2].toString() + ":" + message);
+        log.info(methods[3].getClassName() + "/" + methods[2].getMethodName() + ":" + message);
     }
 }

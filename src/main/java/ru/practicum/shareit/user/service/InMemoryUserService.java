@@ -7,6 +7,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.validation.exception.EmailRegisteredException;
 
 import java.util.List;
 
@@ -25,7 +26,11 @@ public class InMemoryUserService implements UserService {
 
     @Override
     public User addUser(UserDto userDto) {
-        return userStorage.save(userMapper.toUser(userDto));
+        User user = userMapper.toUser(userDto);
+
+        checkEmail(user.getEmail());
+
+        return userStorage.save(user);
     }
 
     @Override
@@ -39,13 +44,39 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
+    public boolean getUserByEmail(String userEmail) {
+        return userStorage.checkUserByEmail(userEmail);
+    }
+
+    @Override
     public User update(long userId, UserDto userDto) {
-        return userStorage.update(userId, userMapper.toUser(userDto));
+        User user = userMapper.toUser(userDto);
+        User check = getUserById(userId);
+
+        if (user.getEmail() != null && !user.getEmail().isEmpty() && !user.getEmail().isBlank() &&
+                !check.getEmail().equals(user.getEmail())) {
+            checkEmail(user.getEmail());
+            delete(check.getId());
+            check.setEmail(user.getEmail());
+        }
+
+        if (user.getName() != null && !user.getName().isEmpty() && !user.getName().isBlank() &&
+                !check.getName().equals(user.getName())) {
+            check.setName(user.getName());
+        }
+
+        return userStorage.update(check);
     }
 
     @Override
     public void delete(long userId) {
         User user = getUserById(userId);
-        userStorage.delete(user);
+        userStorage.delete(user.getEmail());
+    }
+
+    private void checkEmail(String email) {
+        if (getUserByEmail(email)) {
+            throw new EmailRegisteredException("the email was registered");
+        }
     }
 }

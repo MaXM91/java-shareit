@@ -35,6 +35,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    public boolean getUserByEmail(String userEmail) {
+        return true;
+    }
+
     @Override
     public User update(long userId, UserDto userDto) {
         return null;

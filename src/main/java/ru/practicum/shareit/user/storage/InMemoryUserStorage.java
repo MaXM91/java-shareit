@@ -1,11 +1,9 @@
 package ru.practicum.shareit.user.storage;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.validation.exception.EmailRegisteredException;
 import ru.practicum.shareit.validation.exception.ObjectNotFoundException;
 
 import java.util.ArrayList;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 @Qualifier("InMemoryUserStorage")
-@Slf4j
 @Repository
 public class InMemoryUserStorage implements UserStorage {
     private long id = 1;
@@ -22,7 +19,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User save(User user) {
-        checkEmail(user.getEmail());
         user.setId(id++);
         users.put(user.getEmail(), user);
 
@@ -40,26 +36,19 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User update(long userId, User user) {
-        User check = foundUser(userId);
-
-        if (user.getEmail() != null && !user.getEmail().isEmpty() && !user.getEmail().isBlank() && !check.getEmail().equals(user.getEmail())) {
-            checkEmail(user.getEmail());
-            delete(check);
-            check.setEmail(user.getEmail());
-        }
-
-        if (user.getName() != null && !user.getName().isEmpty() && !user.getName().isBlank() && !check.getName().equals(user.getName())) {
-            check.setName(user.getName());
-        }
-
-        users.put(check.getEmail(), check);
-        return check;
+    public boolean checkUserByEmail(String email) {
+        return users.containsKey(email);
     }
 
     @Override
-    public void delete(User user) {
-        users.remove(user.getEmail());
+    public User update(User user) {
+        users.put(user.getEmail(), user);
+        return user;
+    }
+
+    @Override
+    public void delete(String email) {
+        users.remove(email);
     }
 
     private User foundUser(long userId) {
@@ -72,16 +61,9 @@ public class InMemoryUserStorage implements UserStorage {
         }
 
         if (foundUser == null) {
-            log.info("user id - {} not found", userId);
-            throw new ObjectNotFoundException("User id - " + userId + " not found");
+            throw new ObjectNotFoundException("user id - " + userId + " not found");
         } else {
             return foundUser;
-        }
-    }
-
-    private void checkEmail(String email) {
-        if (users.containsKey(email)) {
-            throw new EmailRegisteredException("the email was registered");
         }
     }
 }

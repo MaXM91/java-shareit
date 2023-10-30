@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public User update(@Valid @PathVariable long userId, @RequestBody UserDto userDto) {
+    public User update(@PathVariable long userId, @RequestBody UserDto userDto) {
         log.info("request PATCH/update : {}, {}", userId, userDto);
 
         User responseObject = userService.update(userId, userDto);
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable int userId) {
+    public void deleteUser(@PathVariable long userId) {
         log.info("request DELETE/userId : {}", userId);
 
         userService.delete(userId);

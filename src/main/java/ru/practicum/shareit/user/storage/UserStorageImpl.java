@@ -24,13 +24,17 @@ public class UserStorageImpl implements UserStorage {
         return null;
     }
 
+    public boolean checkUserByEmail(String userEmail) {
+        return true;
+    }
+
     @Override
-    public User update(long userId, User user) {
+    public User update(User user) {
         return null;
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(String email) {
 
     }
 }
