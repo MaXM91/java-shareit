@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class UserDto {
+    private Integer id;
+
     @NotBlank(message = "blank/empty email")
     @Email(message = "bad email")
     private String email;
