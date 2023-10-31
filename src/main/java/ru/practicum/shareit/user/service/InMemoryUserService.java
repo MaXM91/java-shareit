@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -11,15 +10,13 @@ import ru.practicum.shareit.validation.exception.EmailRegisteredException;
 
 import java.util.List;
 
-@Qualifier("InMemoryUserService")
 @Service
 public class InMemoryUserService implements UserService {
     private final UserMapper userMapper;
     private final UserStorage userStorage;
 
     @Autowired
-    InMemoryUserService(UserMapper userMapper,
-                        @Qualifier("InMemoryUserStorage") UserStorage userStorage) {
+    InMemoryUserService(UserMapper userMapper, UserStorage userStorage) {
         this.userMapper = userMapper;
         this.userStorage = userStorage;
     }

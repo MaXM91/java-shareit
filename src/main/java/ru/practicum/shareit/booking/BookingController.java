@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.booking.service.BookingService;
@@ -10,10 +10,7 @@ import ru.practicum.shareit.booking.service.BookingService;
  */
 @RestController
 @RequestMapping(path = "/bookings")
+@RequiredArgsConstructor
 public class BookingController {
-    BookingService bookingService;
-
-    BookingController(@Qualifier("InMemoryBookingService") BookingService bookingService) {
-        this.bookingService = bookingService;
-    }
+    private final BookingService bookingService;
 }

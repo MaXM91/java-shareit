@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.maper.ItemMapper;
@@ -14,20 +13,12 @@ import ru.practicum.shareit.validation.exception.ValidateException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Qualifier("InMemoryItemService")
 @Service
+@RequiredArgsConstructor
 public class InMemoryItemService implements ItemService {
-    ItemMapper itemMapper;
-    ItemStorage itemStorage;
-    UserService userService;
-
-    @Autowired
-    InMemoryItemService(ItemMapper itemMapper, @Qualifier("InMemoryItemStorage") ItemStorage itemStorage,
-                        @Qualifier("InMemoryUserService") UserService userService) {
-        this.itemMapper = itemMapper;
-        this.itemStorage = itemStorage;
-        this.userService = userService;
-    }
+    private final ItemMapper itemMapper;
+    private final ItemStorage itemStorage;
+    private final UserService userService;
 
     @Override
     public Item addItem(long userId, ItemDto itemDto) {

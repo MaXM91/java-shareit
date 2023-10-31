@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RequestMapping;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
@@ -9,11 +8,7 @@ import ru.practicum.shareit.request.service.ItemRequestService;
  * TODO Sprint add-item-requests.
  */
 @RestController
-@RequestMapping(path = "/requests")
+@RequiredArgsConstructor
 public class ItemRequestController {
-    ItemRequestService itemRequestService;
-
-    ItemRequestController(@Qualifier("InMemoryItemRequestService") ItemRequestService itemRequestService) {
-        this.itemRequestService = itemRequestService;
-    }
+    private final ItemRequestService itemRequestService;
 }

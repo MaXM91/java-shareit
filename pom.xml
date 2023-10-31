@@ -28,12 +28,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
@@ -208,32 +202,32 @@
 										<limits>
 											<limit>
 												<counter>INSTRUCTION</counter>
-												<value>COVEREDRATIO</value>
+												<value>COVERED-RATIO</value>
 												<minimum>0.01</minimum>
 											</limit>
 											<limit>
 												<counter>LINE</counter>
-												<value>COVEREDRATIO</value>
+												<value>COVERED-RATIO</value>
 												<minimum>0.9</minimum>
 											</limit>
 											<limit>
 												<counter>BRANCH</counter>
-												<value>COVEREDRATIO</value>
+												<value>COVERED-RATIO</value>
 												<minimum>0.6</minimum>
 											</limit>
 											<limit>
 												<counter>COMPLEXITY</counter>
-												<value>COVEREDRATIO</value>
+												<value>COVERED-RATIO</value>
 												<minimum>0.6</minimum>
 											</limit>
 											<limit>
 												<counter>METHOD</counter>
-												<value>COVEREDRATIO</value>
+												<value>COVERED-RATIO</value>
 												<minimum>0.7</minimum>
 											</limit>
 											<limit>
 												<counter>CLASS</counter>
-												<value>MISSEDCOUNT</value>
+												<value>MISSED-COUNT</value>
 												<maximum>1</maximum>
 											</limit>
 										</limits>

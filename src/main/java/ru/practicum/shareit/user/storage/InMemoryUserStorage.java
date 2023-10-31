@@ -1,7 +1,5 @@
 package ru.practicum.shareit.user.storage;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.validation.exception.ObjectNotFoundException;
@@ -11,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Qualifier("InMemoryUserStorage")
 @Repository
 public class InMemoryUserStorage implements UserStorage {
     private long id = 1;

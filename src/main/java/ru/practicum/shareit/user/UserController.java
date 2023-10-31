@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -17,12 +17,9 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/users")
+@RequiredArgsConstructor
 public class UserController {
-    UserService userService;
-
-    UserController(@Qualifier("InMemoryUserService") UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     /**
      * Create user and return him.

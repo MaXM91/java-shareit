@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.storage;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.validation.exception.ObjectNotFoundException;
@@ -10,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Qualifier("InMemoryItemStorage")
 @Repository
 public class InMemoryItemStorage implements ItemStorage {
     private long id = 1;
