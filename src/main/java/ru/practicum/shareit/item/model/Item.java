@@ -26,7 +26,7 @@ public class Item {
     private Boolean available;
 
     @Positive(message = "ownerId must be > 0")
-    private long ownerId;
+    private int ownerId;
 
     private ItemRequest request;
 }
