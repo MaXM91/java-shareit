@@ -10,7 +10,7 @@ public interface UserService {
         return null;
     }
 
-    default User getUserById(long userId) {
+    default User getUserById(int userId) {
         return null;
     }
 
@@ -22,10 +22,10 @@ public interface UserService {
         return true;
     }
 
-    default User update(long userId, UserDto userDto) {
+    default User update(int userId, UserDto userDto) {
         return null;
     }
 
-    default void delete(long userId) {
+    default void delete(int userId) {
     }
 }

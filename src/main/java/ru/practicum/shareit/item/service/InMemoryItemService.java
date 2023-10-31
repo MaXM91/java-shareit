@@ -27,7 +27,7 @@ public class InMemoryItemService implements ItemService {
     }
 
     @Override
-    public Item addItem(long userId, ItemDto itemDto) {
+    public Item addItem(int userId, ItemDto itemDto) {
         checkUsers(userId);
 
         Item newItem = itemMapper.toItem(itemDto);
@@ -37,14 +37,14 @@ public class InMemoryItemService implements ItemService {
     }
 
     @Override
-    public Item getItemById(long userId, long itemId) {
+    public Item getItemById(int userId, int itemId) {
         checkUsers(userId);
 
         return itemStorage.found(itemId);
     }
 
     @Override
-    public List<Item> getItemsByOwnerId(long userId) {
+    public List<Item> getItemsByOwnerId(int userId) {
         checkUsers(userId);
 
         List<Item> foundItems = new ArrayList<>();
@@ -65,7 +65,7 @@ public class InMemoryItemService implements ItemService {
     }
 
     @Override
-    public List<Item> getItemByString(long userId, String text) {
+    public List<Item> getItemByString(int userId, String text) {
         checkUsers(userId);
 
         List<Item> foundAllItems = getAllItems();
@@ -86,7 +86,7 @@ public class InMemoryItemService implements ItemService {
     }
 
     @Override
-    public Item update(long userId, long itemId, ItemDto itemDto) {
+    public Item update(int userId, int itemId, ItemDto itemDto) {
         checkUsers(userId);
 
         Item newItem = itemMapper.toItem(itemDto);
@@ -120,13 +120,13 @@ public class InMemoryItemService implements ItemService {
     }
 
     @Override
-    public void delete(long userId, Item item) {
+    public void delete(int userId, Item item) {
         checkUsers(userId);
 
         itemStorage.delete(item);
     }
 
-    private void checkUsers(long userId) {
+    private void checkUsers(int userId) {
         User user = userService.getUserById(userId);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Repository
 public class InMemoryUserStorage implements UserStorage {
-    private long id = 1;
+    private int id = 1;
     private final Map<String, User> users = new HashMap<>();
 
     @Override
@@ -23,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User found(long userId) {
+    public User found(int userId) {
         return foundUser(userId);
     }
 

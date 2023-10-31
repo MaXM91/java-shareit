@@ -12,7 +12,7 @@ public class ItemMapper {
     }
 
     public Item toItem(ItemDto itemDto) {
-        long id = 0;
+        int id = 0;
 
         if (itemDto.getId() != null) {
             id = itemDto.getId();

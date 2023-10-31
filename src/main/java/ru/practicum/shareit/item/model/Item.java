@@ -14,7 +14,7 @@ import javax.validation.constraints.Positive;
 @Data
 @AllArgsConstructor
 public class Item {
-    private long id;
+    private int id;
 
     @NotBlank(message = "blank/empty name")
     private String name;

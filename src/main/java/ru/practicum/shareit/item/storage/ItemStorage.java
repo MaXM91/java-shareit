@@ -7,7 +7,7 @@ import java.util.List;
 public interface ItemStorage {
     Item save(Item item);
 
-    Item found(long itemId);
+    Item found(int itemId);
 
     List<Item> getAll();
 

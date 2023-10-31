@@ -31,7 +31,7 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User getUserById(long userId) {
+    public User getUserById(int userId) {
         return userStorage.found(userId);
     }
 
@@ -46,7 +46,7 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User update(long userId, UserDto userDto) {
+    public User update(int userId, UserDto userDto) {
         User user = userMapper.toUser(userDto);
         User check = getUserById(userId);
 
@@ -66,7 +66,7 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public void delete(long userId) {
+    public void delete(int userId) {
         User user = getUserById(userId);
         userStorage.delete(user.getEmail());
     }

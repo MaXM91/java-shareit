@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserStorage {
     User save(User user);
 
-    User found(long userId);
+    User found(int userId);
 
     List<User> get();
 

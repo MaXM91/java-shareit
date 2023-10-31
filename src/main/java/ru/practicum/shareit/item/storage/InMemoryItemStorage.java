@@ -11,8 +11,8 @@ import java.util.Map;
 
 @Repository
 public class InMemoryItemStorage implements ItemStorage {
-    private long id = 1;
-    private final Map<Long, Item> items = new HashMap<>();
+    private int id = 1;
+    private final Map<Integer, Item> items = new HashMap<>();
 
     @Override
     public Item save(Item item) {
@@ -22,7 +22,7 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public Item found(long itemId) {
+    public Item found(int itemId) {
         return foundItem(itemId);
     }
 
@@ -42,7 +42,7 @@ public class InMemoryItemStorage implements ItemStorage {
         items.remove(item.getId());
     }
 
-    private Item foundItem(long itemId) {
+    private Item foundItem(int itemId) {
         Item foundItem = items.get(itemId);
 
         if (foundItem == null) {

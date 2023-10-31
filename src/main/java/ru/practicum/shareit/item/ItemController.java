@@ -25,7 +25,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public Item addItem(@RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
+    public Item addItem(@RequestHeader("X-Sharer-User-Id") Integer userId, @Valid @RequestBody ItemDto itemDto) {
         log.info("request POST/addItem : {}, {}", userId, itemDto);
 
         Item responseObject = itemService.addItem(userId, itemDto);
@@ -35,7 +35,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public Item getItemById(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long itemId) {
+    public Item getItemById(@RequestHeader("X-Sharer-User-Id") Integer userId, @PathVariable int itemId) {
         log.info("request GET/getItemById : {}, {}", userId, itemId);
 
         Item responseObject = itemService.getItemById(userId, itemId);
@@ -45,7 +45,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<Item> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<Item> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") Integer userId) {
         log.info("request GET/getAllItemsByUserId: {}", userId);
 
         List<Item> responseObject = itemService.getItemsByOwnerId(userId);
@@ -55,7 +55,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<Item> getItemByString(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam String text) {
+    public List<Item> getItemByString(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestParam String text) {
         log.info("request GET/getItemByString: {}, {}", userId, text);
 
         List<Item> responseObject = itemService.getItemByString(userId, text);
@@ -65,8 +65,8 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public Item update(@RequestHeader("X-Sharer-User-Id") long userId,
-                       @PathVariable long itemId,
+    public Item update(@RequestHeader("X-Sharer-User-Id") Integer userId,
+                       @PathVariable int itemId,
                        @RequestBody ItemDto itemDto) {
         log.info("request PATCH/update: {}, {}, {}", userId, itemId, itemDto);
 

@@ -41,7 +41,7 @@ public class UserController {
      * @return user by userId.
      */
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable long userId) {
+    public User getUserById(@PathVariable int userId) {
         log.info("request GET/getUserById : {}", userId);
 
         User responseObject = userService.getUserById(userId);
@@ -69,7 +69,7 @@ public class UserController {
      * @return updated user.
      */
     @PatchMapping("/{userId}")
-    public User update(@PathVariable long userId, @RequestBody UserDto userDto) {
+    public User update(@PathVariable int userId, @RequestBody UserDto userDto) {
         log.info("request PATCH/update : {}, {}", userId, userDto);
 
         User responseObject = userService.update(userId, userDto);
@@ -84,7 +84,7 @@ public class UserController {
      * @param userId
      */
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable long userId) {
+    public void deleteUser(@PathVariable int userId) {
         log.info("request DELETE/userId : {}", userId);
 
         userService.delete(userId);

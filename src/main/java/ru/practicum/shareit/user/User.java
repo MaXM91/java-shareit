@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class User {
-    private long id;
+    private int id;
 
     @NotBlank(message = "blank/empty email")
     @Email(message = "bad email")
