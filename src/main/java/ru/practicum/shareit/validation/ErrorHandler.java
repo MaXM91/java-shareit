@@ -6,10 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.validation.exception.EmailRegisteredException;
-import ru.practicum.shareit.validation.exception.ErrorResponse;
-import ru.practicum.shareit.validation.exception.ObjectNotFoundException;
-import ru.practicum.shareit.validation.exception.ValidateException;
+import ru.practicum.shareit.validation.exception.*;
 
 import javax.validation.ConstraintViolationException;
 

@@ -17,7 +17,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RestController
-@RequestMapping("/items")
+@RequestMapping(path = "/items")
 public class ItemController {
     ItemService itemService;
 

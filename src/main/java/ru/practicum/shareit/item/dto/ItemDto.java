@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 public class ItemDto {
-    private long id;
+    private Long id;
 
     @NotBlank(message = "blank/empty name")
     private String name;

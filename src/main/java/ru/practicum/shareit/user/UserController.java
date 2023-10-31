@@ -16,7 +16,7 @@ import java.util.List;
 @Validated
 @Slf4j
 @RestController
-@RequestMapping("/users")
+@RequestMapping(path = "/users")
 public class UserController {
     UserService userService;
 
@@ -42,7 +42,7 @@ public class UserController {
      * @return user by userId.
      */
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable int userId) {
+    public User getUserById(@PathVariable long userId) {
         log.info("request GET/getUserById : {}", userId);
 
         User responseObject = userService.getUserById(userId);
