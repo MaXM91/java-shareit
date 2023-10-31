@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -18,9 +18,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/items")
-@RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+
+    ItemController(@Qualifier("InMemoryItemService") ItemService itemService) {
+        this.itemService = itemService;
+    }
 
     @PostMapping
     public Item addItem(@RequestHeader("X-Sharer-User-Id") long userId, @Valid @RequestBody ItemDto itemDto) {
