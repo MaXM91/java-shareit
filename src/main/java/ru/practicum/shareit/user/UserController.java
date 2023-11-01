@@ -27,10 +27,10 @@ public class UserController {
      * Create user and return him.
      */
     @PostMapping
-    public User addUser(@Valid @RequestBody UserDto userDto) {
+    public UserDto addUser(@Valid @RequestBody UserDto userDto) {
         log.info("request POST/addUser : {}", userDto);
 
-        User responseObject = userService.addUser(userDto);
+        UserDto responseObject = userService.addUser(userDto);
         log.info("response POST/addUser : {}", responseObject);
 
         return responseObject;
@@ -41,10 +41,10 @@ public class UserController {
      * @return user by userId.
      */
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable int userId) {
+    public UserDto getUserById(@PathVariable int userId) {
         log.info("request GET/getUserById : {}", userId);
 
-        User responseObject = userService.getUserById(userId);
+        UserDto responseObject = userService.getUserById(userId);
         log.info("response GET/getUserById : {}", responseObject);
 
         return responseObject;
@@ -54,10 +54,10 @@ public class UserController {
      * @return all users.
      */
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.info("request GET/addAllUsers");
 
-        List<User> responseObject = userService.getAllUsers();
+        List<UserDto> responseObject = userService.getAllUsers();
         log.info("response GET/addAllUsers : {}", responseObject);
 
         return responseObject;
@@ -69,10 +69,10 @@ public class UserController {
      * @return updated user.
      */
     @PatchMapping("/{userId}")
-    public User update(@PathVariable int userId, @RequestBody UserDto userDto) {
+    public UserDto update(@PathVariable int userId, @RequestBody UserDto userDto) {
         log.info("request PATCH/update : {}, {}", userId, userDto);
 
-        User responseObject = userService.update(userId, userDto);
+        UserDto responseObject = userService.update(userId, userDto);
         log.info("response PATCH/update : {}, {}", userId, responseObject);
 
         return responseObject;

@@ -1,20 +1,19 @@
 package ru.practicum.shareit.user.service;
 
-import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
 
 public interface UserService {
-    default User addUser(UserDto userDto) {
+    default UserDto addUser(UserDto userDto) {
         return null;
     }
 
-    default User getUserById(int userId) {
+    default UserDto getUserById(int userId) {
         return null;
     }
 
-    default List<User> getAllUsers() {
+    default List<UserDto> getAllUsers() {
         return null;
     }
 
@@ -22,7 +21,7 @@ public interface UserService {
         return true;
     }
 
-    default User update(int userId, UserDto userDto) {
+    default UserDto update(int userId, UserDto userDto) {
         return null;
     }
 

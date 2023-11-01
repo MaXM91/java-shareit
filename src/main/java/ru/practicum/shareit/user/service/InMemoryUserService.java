@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.validation.exception.EmailRegisteredException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,22 +23,29 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User addUser(UserDto userDto) {
+    public UserDto addUser(UserDto userDto) {
         User user = userMapper.toUser(userDto);
 
         checkEmail(user.getEmail());
 
-        return userStorage.save(user);
+        return userMapper.toUserDto(userStorage.save(user));
     }
 
     @Override
-    public User getUserById(int userId) {
-        return userStorage.found(userId);
+    public UserDto getUserById(int userId) {
+        return userMapper.toUserDto(userStorage.found(userId));
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userStorage.get();
+    public List<UserDto> getAllUsers() {
+        List<UserDto> usersDtoList = new ArrayList<>();
+        List<User> usersList = userStorage.get();
+
+            for (User user : usersList) {
+                usersDtoList.add(userMapper.toUserDto(user));
+            }
+
+        return usersDtoList;
     }
 
     @Override
@@ -46,9 +54,9 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
-    public User update(int userId, UserDto userDto) {
+    public UserDto update(int userId, UserDto userDto) {
         User user = userMapper.toUser(userDto);
-        User check = getUserById(userId);
+        User check = userMapper.toUser(getUserById(userId));
 
         if (user.getEmail() != null && !user.getEmail().isEmpty() && !user.getEmail().isBlank() &&
                 !check.getEmail().equals(user.getEmail())) {
@@ -62,12 +70,12 @@ public class InMemoryUserService implements UserService {
             check.setName(user.getName());
         }
 
-        return userStorage.update(check);
+        return userMapper.toUserDto(userStorage.update(check));
     }
 
     @Override
     public void delete(int userId) {
-        User user = getUserById(userId);
+        User user = userMapper.toUser(getUserById(userId));
         userStorage.delete(user.getEmail());
     }
 

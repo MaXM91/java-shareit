@@ -6,7 +6,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.maper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemStorage;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.validation.exception.ValidateException;
 
@@ -127,6 +127,6 @@ public class InMemoryItemService implements ItemService {
     }
 
     private void checkUsers(int userId) {
-        User user = userService.getUserById(userId);
+        UserDto user = userService.getUserById(userId);
     }
 }
