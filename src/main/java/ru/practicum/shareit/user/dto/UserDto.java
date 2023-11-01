@@ -11,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 public class UserDto {
     private Integer id;
 
+    @NotBlank(message = "blank/empty name")
+    private String name;
+
     @NotBlank(message = "blank/empty email")
     @Email(message = "bad email")
     private String email;
-
-    @NotBlank(message = "blank/empty name")
-    private String name;
 }
