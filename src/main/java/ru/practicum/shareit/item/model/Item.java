@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.shareit.request.ItemRequest;
 
 import javax.validation.constraints.NotBlank;
@@ -11,8 +10,10 @@ import javax.validation.constraints.Positive;
 /**
  * Item entity.
  */
-@Data
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Item {
     private int id;
 
@@ -29,4 +30,17 @@ public class Item {
     private int ownerId;
 
     private ItemRequest request;
+
+    @Override
+    public String toString() {
+        return "\n" +
+                "    Item{\n" +
+                "         id = " + id + "\n" +
+                "         name = " + name + "\n" +
+                "         description = " + description + "\n" +
+                "         available = " + available + "\n" +
+                "         ownerId = " + ownerId + "\n" +
+                "         request = " + request + "\n" +
+                "        }";
+    }
 }
