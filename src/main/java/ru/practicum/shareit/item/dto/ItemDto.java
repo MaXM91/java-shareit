@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,8 +8,12 @@ import javax.validation.constraints.NotNull;
 /**
  * itemDto.
  */
-@Data
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemDto {
     private Integer id;
 
@@ -22,4 +25,22 @@ public class ItemDto {
 
     @NotNull(message = "availability must be true/false")
     private Boolean available;
+
+    public ItemDto(int id, String name, String description, Boolean available) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
+
+    @Override
+    public String toString() {
+        return "\n" +
+               "    ItemDto{\n" +
+               "            id = " + id + "\n" +
+               "            name = " + name + "\n" +
+               "            description = " + description + "\n" +
+               "            available = " + available + "\n" +
+               "           }";
+    }
 }

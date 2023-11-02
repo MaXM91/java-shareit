@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service;
 
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
@@ -10,6 +11,10 @@ public interface UserService {
     }
 
     default UserDto getUserById(int userId) {
+        return null;
+    }
+
+    default User getUserEntityById(int userId) {
         return null;
     }
 

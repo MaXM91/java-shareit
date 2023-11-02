@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -17,9 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
+    private static final String UserId = "/{userId}";
     private final UserService userService;
 
-    UserController(UserService userService) {
+    UserController(@Qualifier("UserServiceImpl") UserService userService) {
         this.userService = userService;
     }
 
@@ -40,7 +42,7 @@ public class UserController {
      * @param userId
      * @return user by userId.
      */
-    @GetMapping("/{userId}")
+    @GetMapping(UserId)
     public UserDto getUserById(@PathVariable int userId) {
         log.info("request GET/getUserById : {}", userId);
 
@@ -68,7 +70,7 @@ public class UserController {
      * @param userDto
      * @return updated user.
      */
-    @PatchMapping("/{userId}")
+    @PatchMapping(UserId)
     public UserDto update(@PathVariable int userId, @RequestBody UserDto userDto) {
         log.info("request PATCH/update : {}, {}", userId, userDto);
 
@@ -83,7 +85,7 @@ public class UserController {
      *
      * @param userId
      */
-    @DeleteMapping("/{userId}")
+    @DeleteMapping(UserId)
     public void deleteUser(@PathVariable int userId) {
         log.info("request DELETE/userId : {}", userId);
 

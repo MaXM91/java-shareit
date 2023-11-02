@@ -6,9 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.validation.exceptions.EmailRegisteredException;
-import ru.practicum.shareit.validation.exceptions.ObjectNotFoundException;
-import ru.practicum.shareit.validation.exceptions.ValidateException;
+import ru.practicum.shareit.validation.exceptions.*;
 
 import javax.validation.ConstraintViolationException;
 
@@ -19,40 +17,49 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)                                      // 404
     public ErrorResponse notFound(final ObjectNotFoundException exc) {
         getLog(exc.getStackTrace(), exc.getMessage());
-        return new ErrorResponse(getClassStartException(exc.getStackTrace()) + "/" +
-                getMethodStartException(exc.getStackTrace()) + exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)                                      // 409
     public ErrorResponse emailRegistered(final EmailRegisteredException exc) {
         getLog(exc.getStackTrace(), exc.getMessage());
-        return new ErrorResponse(getClassStartException(exc.getStackTrace()) + "/" +
-                getMethodStartException(exc.getStackTrace()) + exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)                                    // 404
     public ErrorResponse validationPartOfBody(final ValidateException exc) {
         getLog(exc.getStackTrace(), exc.getMessage());
-        return new ErrorResponse(getClassStartException(exc.getStackTrace()) + "/" +
-                getMethodStartException(exc.getStackTrace()) + exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
+    public ErrorResponse notValidLogicRequest(final ValidException exc) {
+        getLog(exc.getStackTrace(), exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
     public ErrorResponse badSBValidationUpLevelController(final ConstraintViolationException exc) {
         getLog(exc.getStackTrace(), exc.getMessage());
-        return new ErrorResponse(getClassStartException(exc.getStackTrace()) + "/" +
-                getMethodStartException(exc.getStackTrace()) + exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
     public ErrorResponse badSBValidationOnRequestBody(final MethodArgumentNotValidException exc) {
         getLog(exc.getStackTrace(), exc.getMessage());
-        return new ErrorResponse(getClassStartException(exc.getStackTrace()) + "/" +
-                getMethodStartException(exc.getStackTrace()) + exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)                          // 500
+    public ErrorResponse unsupportedStatus(final UnsupportedException exc) {
+        getLog(exc.getStackTrace(), exc.getMessage());
+        return new ErrorResponse(exc.getMessage());
     }
 
     private String getClassStartException(StackTraceElement[] methods) {
@@ -64,6 +71,6 @@ public class ErrorHandler {
     }
 
     private void getLog(StackTraceElement[] methods, String message) {
-        log.info(methods[3].getClassName() + "/" + methods[2].getMethodName() + ":" + message);
+        log.info(methods[3].getClassName() + "/" + methods[2].getMethodName() + ": " + message);
     }
 }
