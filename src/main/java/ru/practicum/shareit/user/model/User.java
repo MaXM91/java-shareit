@@ -1,11 +1,6 @@
 package ru.practicum.shareit.user.model;
 
-/**
- * TODO Sprint add-controllers.
- */
-
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,8 +8,10 @@ import javax.validation.constraints.NotBlank;
 /**
  * Basic entity User
  */
-@Data
 @Builder
+@Getter
+@Setter
+@EqualsAndHashCode
 public class User {
     private int id;
 
@@ -24,5 +21,15 @@ public class User {
 
     @NotBlank(message = "blank/empty name")
     private String name;
+
+    @Override
+    public String toString() {
+        return "\n" +
+            "    User{\n" +
+            "         id = " + id + "\n" +
+            "         email = " + email + "\n" +
+            "         name = " + name + "\n" +
+            "        }";
+    }
 }
 

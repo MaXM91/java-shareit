@@ -12,6 +12,7 @@ import ru.practicum.shareit.validation.exceptions.ValidateException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InMemoryItemService implements ItemService {
@@ -47,16 +48,12 @@ public class InMemoryItemService implements ItemService {
     public List<ItemDto> getItemsByOwnerId(int userId) {
         checkUsers(userId);
 
-        List<ItemDto> foundItems = new ArrayList<>();
         List<Item> allItems = getAllItems();
 
-        for (Item item : allItems) {
-            if (item.getOwnerId() == userId) {
-                foundItems.add(itemMapper.toItemDto(item));
-            }
-        }
-
-        return foundItems;
+        return allItems.stream()
+                .filter(item -> item.getOwnerId() == userId)
+                .map(itemMapper::toItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -68,21 +65,17 @@ public class InMemoryItemService implements ItemService {
     public List<ItemDto> getItemByString(int userId, String text) {
         checkUsers(userId);
 
-        List<Item> foundAllItems = getAllItems();
-        List<ItemDto> response = new ArrayList<>();
-
         if (text.isBlank() || text.isEmpty()) {
             return new ArrayList<>();
         }
 
-        for (Item item : foundAllItems) {
-            if ((item.getDescription().toLowerCase().contains(text.toLowerCase()) ||
-                    item.getName().toLowerCase().contains(text.toLowerCase())) && item.getAvailable()) {
-                response.add(itemMapper.toItemDto(item));
-            }
-        }
+        List<Item> foundAllItems = getAllItems();
 
-        return response;
+        return foundAllItems.stream()
+                .filter(item -> (item.getDescription().toLowerCase().contains(text.toLowerCase()) ||
+                        item.getName().toLowerCase().contains(text.toLowerCase())) && item.getAvailable())
+                .map(itemMapper::toItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override

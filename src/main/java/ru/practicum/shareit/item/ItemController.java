@@ -18,13 +18,16 @@ import java.util.List;
 @RequestMapping(path = "/items")
 public class ItemController {
     private final ItemService itemService;
+    private static final String UserId = "X-Sharer-User-Id";
+    private static final String ItemId = "/{itemId}";
+    private static final String Search = "/search";
 
     ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
     @PostMapping
-    public ItemDto addItem(@RequestHeader("X-Sharer-User-Id") Integer userId, @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto addItem(@RequestHeader(UserId) Integer userId, @Valid @RequestBody ItemDto itemDto) {
         log.info("request POST/addItem : {}, {}", userId, itemDto);
 
         ItemDto responseObject = itemService.addItem(userId, itemDto);
@@ -33,8 +36,8 @@ public class ItemController {
         return responseObject;
     }
 
-    @GetMapping("/{itemId}")
-    public ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") Integer userId, @PathVariable int itemId) {
+    @GetMapping(ItemId)
+    public ItemDto getItemById(@RequestHeader(UserId) Integer userId, @PathVariable int itemId) {
         log.info("request GET/getItemById : {}, {}", userId, itemId);
 
         ItemDto responseObject = itemService.getItemById(userId, itemId);
@@ -44,7 +47,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public List<ItemDto> getItemsByUserId(@RequestHeader(UserId) Integer userId) {
         log.info("request GET/getAllItemsByUserId: {}", userId);
 
         List<ItemDto> responseObject = itemService.getItemsByOwnerId(userId);
@@ -53,8 +56,8 @@ public class ItemController {
         return responseObject;
     }
 
-    @GetMapping("/search")
-    public List<ItemDto> getItemByString(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestParam String text) {
+    @GetMapping(Search)
+    public List<ItemDto> getItemByString(@RequestHeader(UserId) Integer userId, @RequestParam String text) {
         log.info("request GET/getItemByString: {}, {}", userId, text);
 
         List<ItemDto> responseObject = itemService.getItemByString(userId, text);
@@ -63,8 +66,8 @@ public class ItemController {
         return responseObject;
     }
 
-    @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader("X-Sharer-User-Id") Integer userId,
+    @PatchMapping(ItemId)
+    public ItemDto update(@RequestHeader(UserId) Integer userId,
                        @PathVariable int itemId,
                        @RequestBody ItemDto itemDto) {
         log.info("request PATCH/update: {}, {}, {}", userId, itemId, itemDto);

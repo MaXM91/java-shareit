@@ -8,8 +8,8 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.validation.exceptions.EmailRegisteredException;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InMemoryUserService implements UserService {
@@ -38,14 +38,11 @@ public class InMemoryUserService implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        List<UserDto> usersDtoList = new ArrayList<>();
         List<User> usersList = userStorage.get();
 
-        for (User user : usersList) {
-            usersDtoList.add(userMapper.toUserDto(user));
-        }
-
-        return usersDtoList;
+        return usersList.stream()
+                .map(userMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
