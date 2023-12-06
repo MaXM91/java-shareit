@@ -16,61 +16,49 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)                                      // 404
     public ErrorResponse notFound(final ObjectNotFoundException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)                                      // 409
     public ErrorResponse emailRegistered(final EmailRegisteredException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)                                    // 404
     public ErrorResponse validationPartOfBody(final ValidateException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
     public ErrorResponse notValidLogicRequest(final ValidException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
     public ErrorResponse badSBValidationUpLevelController(final ConstraintViolationException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)                                    // 400
     public ErrorResponse badSBValidationOnRequestBody(final MethodArgumentNotValidException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)                          // 500
     public ErrorResponse unsupportedStatus(final UnsupportedException exc) {
-        getLog(exc.getStackTrace(), exc.getMessage());
+        log.error(exc.getMessage(), exc);
         return new ErrorResponse(exc.getMessage());
-    }
-
-    private String getClassStartException(StackTraceElement[] methods) {
-        return methods[3].getClassName();
-    }
-
-    private String getMethodStartException(StackTraceElement[] methods) {
-        return methods[2].getMethodName();
-    }
-
-    private void getLog(StackTraceElement[] methods, String message) {
-        log.info(methods[3].getClassName() + "/" + methods[2].getMethodName() + ": " + message);
     }
 }

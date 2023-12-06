@@ -10,7 +10,6 @@ import ru.practicum.shareit.item.dto.BookingForItemDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithBookingCommentDto;
 import ru.practicum.shareit.item.dto.ItemWithBookingDto;
-import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.db.CommentStorage;
@@ -20,11 +19,10 @@ import ru.practicum.shareit.validation.exceptions.ObjectNotFoundException;
 import ru.practicum.shareit.validation.exceptions.ValidateException;
 
 import javax.transaction.Transactional;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,7 +39,6 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     ItemServiceImpl(ItemMapper itemMapper, ItemStorage itemStorage,
                     @Qualifier("UserServiceImpl") UserService userService,
-                    CommentMapper commentMapper,
                     BookingStorage bookingStorage,
                     CommentStorage commentStorage) {
         this.itemMapper = itemMapper;
@@ -75,9 +72,11 @@ public class ItemServiceImpl implements ItemService {
 
         Item foundedItem = getItem(itemId);
         ItemWithBookingDto itemWithBookingDto = itemMapper.toItemWithBookingDto(foundedItem);
+        List<BookingForItemDto> bookings = bookingStorage.findAllByItemIdAndStatus(foundedItem.getId(),
+                StatusBooking.APPROVED.ordinal());
 
         if (foundedItem.getOwnerId() == userId) {
-            foundBookingForItem(itemWithBookingDto);
+            foundBookingForItem(itemWithBookingDto, bookings);
         }
 
         ItemWithBookingCommentDto itemWithBookingCommentDto = itemMapper.toItemWithBookingCommentDto(itemWithBookingDto);
@@ -94,11 +93,15 @@ public class ItemServiceImpl implements ItemService {
         List<ItemWithBookingDto> allItems = itemStorage.findByOwnerId(userId).stream()
                 .map(itemMapper::toItemWithBookingDto)
                 .collect(Collectors.toList());
+        List<BookingForItemDto> bookings = bookingStorage.findAllByItemOwnerIdAndStatus(userId,
+                StatusBooking.APPROVED.ordinal());
 
         List<ItemWithBookingDto> response = new ArrayList<>();
 
         for (ItemWithBookingDto item : allItems) {
-            response.add(foundBookingForItem(item));
+            response.add(foundBookingForItem(item, bookings.stream()
+                                                           .filter(x -> x.getItemId() == item.getId())
+                                                           .collect(Collectors.toList())));
         }
 
         return response;
@@ -156,55 +159,63 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private Item getItem(int itemId) {
-        Optional<Item> foundItem = itemStorage.findById(itemId);
-
-        if (foundItem.isPresent()) {
-            return foundItem.get();
-        } else {
-            throw new ObjectNotFoundException("item id - " + itemId + " not found");
-        }
+        return itemStorage.findById(itemId)
+                .orElseThrow(() -> new ObjectNotFoundException("item id - " + itemId + " not found"));
     }
 
-    private ItemWithBookingDto foundBookingForItem(ItemWithBookingDto foundedItem) {
-        List<BookingForItemDto> foundedBooking =
-                bookingStorage.findAllByItemIdAndStatus(foundedItem.getId(), StatusBooking.APPROVED.ordinal());
-
+    private ItemWithBookingDto foundBookingForItem(ItemWithBookingDto foundedItem, List<BookingForItemDto> bookings) {
         LocalDateTime thisMoment = LocalDateTime.now();
-        long lDifference = 1000000000000000000L;
-        long nDifference = 1000000000000000000L;
-        long difference;
-        Duration diff;
 
-        for (int i = 0; i < foundedBooking.size(); i++) {
-            if (foundedBooking.get(i).getStart().isBefore(thisMoment) && foundedBooking.get(i).getEnd().isAfter(thisMoment)) {
-                foundedItem.setLastBooking(foundedBooking.get(i));
+        List<BookingForItemDto> foundedBooking = bookings;
 
-                if (i + 1 < foundedBooking.size()) {
-                    foundedItem.setNextBooking(foundedBooking.get(i + 1));
-                }
+        List<BookingForItemDto> lastBooking;
+        List<BookingForItemDto> nextBooking;
+
+        lastBooking = foundedBooking.stream()
+                .filter(x -> (x.getStart().isBefore(thisMoment) || x.getStart().isEqual(thisMoment)) &&
+                        (x.getEnd().isAfter(thisMoment) || x.getEnd().isEqual(thisMoment)))
+                .limit(1)
+                .collect(Collectors.toList());
+
+        if (!lastBooking.isEmpty()) {
+            foundedItem.setLastBooking(lastBooking.get(0));
+
+            nextBooking = foundedBooking.stream()
+                    .filter(x -> x.getStart().isAfter(thisMoment) &&
+                            x.getEnd().isAfter(x.getStart()))
+                    .sorted(Comparator.comparing(BookingForItemDto::getStart))
+                    .limit(1)
+                    .collect(Collectors.toList());
+
+            if (!nextBooking.isEmpty()) {
+                foundedItem.setNextBooking(nextBooking.get(0));
+
                 return foundedItem;
-            } else {
-                if (foundedBooking.get(i).getEnd().isBefore(thisMoment)) {
-                    diff = Duration.between(thisMoment, foundedBooking.get(i).getEnd());
-                    difference = Math.abs(diff.getSeconds());
-                    if (difference < lDifference) {
-                        lDifference = difference;
-                        foundedItem.setLastBooking(foundedBooking.get(i));
-                    }
-                } else {
-                    diff = Duration.between(thisMoment, foundedBooking.get(i).getStart());
-                    difference = Math.abs(diff.getSeconds());
-                    if (difference < nDifference) {
-                        nDifference = difference;
-                        foundedItem.setNextBooking(foundedBooking.get(i));
-                    }
-                    if (i + 1 == foundedBooking.size()) {
-                        return foundedItem;
-                    }
-                }
+            }
+        } else {
+            lastBooking = foundedBooking.stream()
+                    .filter(x -> (x.getEnd().isBefore(thisMoment) || x.getEnd().isEqual(thisMoment)) &&
+                            x.getStart().isBefore(x.getEnd()))
+                    .sorted(Comparator.comparing(BookingForItemDto::getEnd).reversed())
+                    .limit(1)
+                    .collect(Collectors.toList());
+
+            if (!lastBooking.isEmpty()) {
+                foundedItem.setLastBooking(lastBooking.get(0));
+            }
+
+            nextBooking = foundedBooking.stream()
+                    .filter(x -> (x.getStart().isAfter(thisMoment) || x.getStart().isEqual(thisMoment))
+                            && x.getEnd().isAfter(x.getStart()))
+                    .sorted(Comparator.comparing(BookingForItemDto::getStart))
+                    .limit(1)
+                    .collect(Collectors.toList());
+
+            if (!nextBooking.isEmpty()) {
+                foundedItem.setNextBooking(nextBooking.get(0));
             }
         }
+
         return foundedItem;
     }
-
 }

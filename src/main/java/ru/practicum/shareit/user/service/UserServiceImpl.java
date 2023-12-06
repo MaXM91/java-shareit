@@ -12,7 +12,6 @@ import ru.practicum.shareit.validation.exceptions.ObjectNotFoundException;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -97,12 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User getUser(int userId) {
-        Optional<User> foundUser = userStorage.findById(userId);
-
-        if (foundUser.isPresent()) {
-            return foundUser.get();
-        } else {
-            throw new ObjectNotFoundException("user id - " + userId + " not found");
-        }
+        return userStorage.findById(userId)
+                .orElseThrow(() -> new ObjectNotFoundException("user id - " + userId + " not found"));
     }
 }

@@ -26,13 +26,6 @@ public class ItemDto {
     @NotNull(message = "availability must be true/false")
     private Boolean available;
 
-    public ItemDto(int id, String name, String description, Boolean available) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.available = available;
-    }
-
     @Override
     public String toString() {
         return "\n" +

@@ -39,6 +39,11 @@ public class InMemoryUserService implements UserService {
     }
 
     @Override
+    public User getUserEntityById(int userId) {
+        return null;
+    }
+
+    @Override
     public List<UserDto> getAllUsers() {
         List<User> usersList = userStorage.get();
 

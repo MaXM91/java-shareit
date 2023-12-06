@@ -1,33 +1,18 @@
 package ru.practicum.shareit.booking.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.ItemBookingDto;
 import ru.practicum.shareit.booking.dto.UserBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 @Component
 public class BookingMapper {
-    private UserService userService;
-    private ItemService itemService;
 
-    BookingMapper(@Qualifier("UserServiceImpl") UserService userService,
-                  @Qualifier("ItemServiceImpl") ItemService itemService) {
-        this.userService = userService;
-        this.itemService = itemService;
-    }
-
-    @Autowired
-    public void setUserService(@Qualifier("UserServiceImpl") UserService userService) {
-        this.userService = userService;
-    }
-
-    public Booking toBooking(BookingDto bookingDto) {
+    public Booking toBooking(BookingDto bookingDto, User user, Item item) {
         Booking booking = new Booking();
 
         if (bookingDto.getId() != null) {
@@ -41,8 +26,8 @@ public class BookingMapper {
             booking.setStatus(bookingDto.getStatus());
         }
 
-        booking.setUser(userService.getUserEntityById(bookingDto.getBookerId()));
-        booking.setItem(itemService.getItemEntityById(bookingDto.getItemId()));
+        booking.setUser(user);
+        booking.setItem(item);
 
         return booking;
     }

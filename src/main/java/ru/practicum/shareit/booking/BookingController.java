@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class BookingController {
 
     @GetMapping
     public List<BookingRequestDto> getBookingsByUserId(@Positive @RequestHeader(UserId) Integer userId,
-             @NotBlank(message = "state must not be blank") @RequestParam(defaultValue = "ALL") String state) {
+             @NotNull(message = "state must not be null") @RequestParam(defaultValue = "ALL") StateBooking state) {
         log.info("request GET/getBookingsByUserId : {}, {}", userId, state);
 
         List<BookingRequestDto> responseObject = bookingService.getBookingsByUserId(userId, state);
@@ -61,7 +61,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingRequestDto> getBookingsByOwnerItem(@Positive @RequestHeader(UserId) Integer userId,
-             @NotBlank(message = "state must not be blank") @RequestParam(defaultValue = "ALL") String state) {
+             @NotNull(message = "state must not be null") @RequestParam(defaultValue = "ALL") StateBooking state) {
         log.info("request GET/getBookingsByOwnerItem : {}, {}", userId, state);
 
         List<BookingRequestDto> responseObject = bookingService.getBookingsByOwnerItem(userId, state);

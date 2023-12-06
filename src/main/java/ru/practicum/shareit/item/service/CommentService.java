@@ -45,6 +45,6 @@ public class CommentService {
     }
 
     private void checkBooking(int userId, int itemId) {
-        bookingService.getBookingByUserIdAndItemId(userId, itemId);
+        bookingService.checkBookingByUserIdAndItemId(userId, itemId);
     }
 }

@@ -25,11 +25,20 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@NamedNativeQuery(name = "BookingForItem",
-        query = "SELECT id, booker_id AS bookerId, start_date AS start, end_date AS \"end\" " +
-                "FROM bookings " +
-                "WHERE item_id = ?1 AND status = ?2 " +
-                "ORDER BY start DESC",
+@NamedNativeQuery(name = "BookingForItemByOwnerId",
+        query = "SELECT b.id AS id, b.booker_id AS bookerId, b.start_date AS start, b.end_date AS \"end\", b.item_id AS itemId " +
+                "FROM bookings AS b " +
+                "LEFT OUTER JOIN items AS i ON b.item_id = i.id " +
+                "WHERE i.owner_id = ?1 AND b.status = ?2 " +
+                "ORDER BY start DESC ",
+        resultSetMapping = "MyBookingForItemDto")
+
+@NamedNativeQuery(name = "BookingForItemByItemId",
+        query = "SELECT b.id AS id, b.booker_id AS bookerId, b.start_date AS start, b.end_date AS \"end\", b.item_id AS itemId " +
+                "FROM bookings AS b " +
+                "LEFT OUTER JOIN items AS i ON b.item_id = i.id " +
+                "WHERE i.id = ?1 AND b.status = ?2 " +
+                "ORDER BY start DESC ",
         resultSetMapping = "MyBookingForItemDto")
 
 @SqlResultSetMapping(
@@ -39,11 +48,13 @@ import java.time.LocalDateTime;
                         @ColumnResult(name = "id", type = Integer.class),
                         @ColumnResult(name = "bookerId", type = Integer.class),
                         @ColumnResult(name = "start", type = LocalDateTime.class),
-                        @ColumnResult(name = "end", type = LocalDateTime.class)
+                        @ColumnResult(name = "end", type = LocalDateTime.class),
+                        @ColumnResult(name = "itemId", type = Integer.class)
                 },
                 targetClass = BookingForItemDto.class
         )}
 )
+
 public class Booking {
     @Id
     @Column(name = "id")

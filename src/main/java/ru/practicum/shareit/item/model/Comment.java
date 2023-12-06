@@ -51,7 +51,7 @@ public class Comment {
     @NotNull(message = "item must be not null")
     private Item item;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id")
     @NotNull(message = " author must be not null")
     private User author;

@@ -9,19 +9,13 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-
+@AllArgsConstructor
 public class BookingForItemDto {
     private int id;
     private int bookerId;
     private LocalDateTime start;
     private LocalDateTime end;
-
-    public BookingForItemDto(Integer id, Integer bookerId, LocalDateTime start, LocalDateTime end) {
-        this.id = id;
-        this.bookerId = bookerId;
-        this.start = start;
-        this.end = end;
-    }
+    private int itemId;
 
     @Override
     public String toString() {
@@ -31,6 +25,7 @@ public class BookingForItemDto {
                 "                     bookerId = " + bookerId + "\n" +
                 "                     start = " + start + "\n" +
                 "                     end = " + end + "\n" +
+                "                     itemId = " + itemId + "\n" +
                 "                    }";
     }
 
