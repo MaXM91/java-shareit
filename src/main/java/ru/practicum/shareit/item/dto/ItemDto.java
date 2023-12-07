@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
 public class ItemDto {
     private Integer id;
 

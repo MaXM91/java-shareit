@@ -1,25 +1,23 @@
 package ru.practicum.shareit.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.memory.InMemoryUserStorage;
+import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.validation.exceptions.EmailRegisteredException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Qualifier("InMemoryUserService")
 @Service
 public class InMemoryUserService implements UserService {
     private final UserMapper userMapper;
-    private final InMemoryUserStorage userStorage;
+    private final UserStorage userStorage;
 
     @Autowired
-    InMemoryUserService(UserMapper userMapper, InMemoryUserStorage userStorage) {
+    InMemoryUserService(UserMapper userMapper, UserStorage userStorage) {
         this.userMapper = userMapper;
         this.userStorage = userStorage;
     }
@@ -36,11 +34,6 @@ public class InMemoryUserService implements UserService {
     @Override
     public UserDto getUserById(int userId) {
         return userMapper.toUserDto(userStorage.found(userId));
-    }
-
-    @Override
-    public User getUserEntityById(int userId) {
-        return null;
     }
 
     @Override

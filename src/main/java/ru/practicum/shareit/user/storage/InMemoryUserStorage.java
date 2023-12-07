@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.storage.memory;
+package ru.practicum.shareit.user.storage;
 
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.model.User;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserStorageInMemory implements InMemoryUserStorage {
+public class InMemoryUserStorage implements UserStorage {
     private int id = 1;
     private final Map<String, User> users = new HashMap<>();
 

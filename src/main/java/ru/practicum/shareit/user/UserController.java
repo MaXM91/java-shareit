@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -21,7 +20,7 @@ public class UserController {
     private static final String UserId = "/{userId}";
     private final UserService userService;
 
-    UserController(@Qualifier("UserServiceImpl") UserService userService) {
+    UserController(UserService userService) {
         this.userService = userService;
     }
 

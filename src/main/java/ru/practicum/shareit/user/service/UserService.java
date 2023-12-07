@@ -1,23 +1,31 @@
 package ru.practicum.shareit.user.service;
 
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
 public interface UserService {
-    UserDto addUser(UserDto userDto);
+    default UserDto addUser(UserDto userDto) {
+        return null;
+    }
 
-    UserDto getUserById(int userId);
+    default UserDto getUserById(int userId) {
+        return null;
+    }
 
-    User getUserEntityById(int userId);
+    default List<UserDto> getAllUsers() {
+        return null;
+    }
 
-    List<UserDto> getAllUsers();
+    default boolean getUserByEmail(String userEmail) {
+        return true;
+    }
 
-    boolean getUserByEmail(String userEmail);
+    default UserDto update(int userId, UserDto userDto) {
+        return null;
+    }
 
-    UserDto update(int userId, UserDto userDto);
-
-    void delete(int userId);
+    default void delete(int userId) {
+    }
 }
 
