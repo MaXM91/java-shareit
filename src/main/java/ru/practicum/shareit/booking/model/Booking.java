@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
  * Booking entity.
  */
 
-
-
 @Entity
 @Table(name = "bookings", schema = "public")
 @Builder

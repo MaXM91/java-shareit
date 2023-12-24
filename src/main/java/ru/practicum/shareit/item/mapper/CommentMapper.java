@@ -13,10 +13,21 @@ public class CommentMapper {
     public Comment toComment(User user, Item item, CommentDto commentDto) {
         Comment newComment = new Comment();
 
+        if (commentDto.getId() == null) {
+            newComment.setId(0);
+        } else {
+            newComment.setId(commentDto.getId());
+        }
+
         newComment.setText(commentDto.getText());
         newComment.setItem(item);
         newComment.setAuthor(user);
-        newComment.setCreated(LocalDateTime.now());
+
+        if (commentDto.getCreated() == null) {
+            newComment.setCreated(LocalDateTime.now());
+        } else {
+            newComment.setCreated(commentDto.getCreated());
+        }
 
         return newComment;
     }

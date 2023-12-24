@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Table(name = "comments")
 @Entity
@@ -66,7 +67,7 @@ public class Comment {
                 "            text = " + text + "\n" +
                 "            item = " + item + "\n" +
                 "            author = " + author + "\n" +
-                "            created = " + created + "\n" +
+                "            created = " + created.truncatedTo(ChronoUnit.SECONDS) + "\n" +
                 "           }";
     }
 }

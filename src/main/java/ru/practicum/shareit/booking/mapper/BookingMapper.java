@@ -32,20 +32,6 @@ public class BookingMapper {
         return booking;
     }
 
-    public BookingDto toBookingDto(Booking booking) {
-        BookingDto bookingDto = new BookingDto();
-
-        bookingDto.setId(booking.getId());
-        bookingDto.setStart(booking.getStart());
-        bookingDto.setEnd(booking.getEnd());
-        bookingDto.setStatus(booking.getStatus());
-        bookingDto.setBookerId(booking.getUser().getId());
-        bookingDto.setItemId(booking.getItem().getId());
-        bookingDto.setItemName(booking.getItem().getName());
-
-        return bookingDto;
-    }
-
     public BookingRequestDto toBookingRequestDto(Booking booking) {
         BookingRequestDto bookingRequestDto = new BookingRequestDto();
 
