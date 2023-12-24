@@ -8,10 +8,12 @@ import javax.validation.constraints.NotBlank;
 /**
  * UserDto.
  */
-@Builder
+@Data
 @Getter
 @Setter
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     private Integer id;
 

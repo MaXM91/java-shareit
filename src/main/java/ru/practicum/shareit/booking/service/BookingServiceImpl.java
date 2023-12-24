@@ -66,12 +66,12 @@ public class BookingServiceImpl implements BookingService {
         if (bookingDto.getStart().isEqual(bookingDto.getEnd())) {
             throw new ValidException("start and end have one time");
         }
-
+/*
         if (!bookingStorage.checkFreeDateBooking(newBooking.getItem().getId(),
                 newBooking.getStart(), newBooking.getEnd()).isEmpty()) {
             throw new ValidateException("item is booked for this time");
         }
-
+*/
         newBooking.setStatus(StatusBooking.WAITING);
 
         return bookingMapper.toBookingRequestDto(bookingStorage.save(newBooking));
@@ -91,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingRequestDto> getBookingsByUserId(int userId, StateBooking state) {
+    public List<BookingRequestDto> getBookingsByUserId(int userId, StateBooking state, Integer from, Integer size) {
         checkUser(userId);
 
         LocalDateTime date = LocalDateTime.now();
@@ -99,26 +99,26 @@ public class BookingServiceImpl implements BookingService {
 
         switch (state) {
             case ALL:
-                return response(bookingStorage.findAllByUserId(userId));
+                return response(bookingStorage.findAllByUserId(userId), from, size);
             case PAST:
-                return response(bookingStorage.findByUserIdAndEndBefore(userId, date));
+                return response(bookingStorage.findByUserIdAndEndBefore(userId, date), from, size);
             case FUTURE:
-                return response(bookingStorage.findByUserIdAndStartAfter(userId, date));
+                return response(bookingStorage.findByUserIdAndStartAfter(userId, date), from, size);
             case CURRENT:
-                return response(bookingStorage.findByUserIdAndStartBeforeAndEndAfter(userId, date, date));
+                return response(bookingStorage.findByUserIdAndStartBeforeAndEndAfter(userId, date, date), from, size);
             case WAITING:
                 status = StatusBooking.WAITING;
-                return response(bookingStorage.findByUserIdAndStatus(userId, status));
+                return response(bookingStorage.findByUserIdAndStatus(userId, status), from, size);
             case REJECTED:
                 status = StatusBooking.REJECTED;
-                return response(bookingStorage.findByUserIdAndStatus(userId, status));
+                return response(bookingStorage.findByUserIdAndStatus(userId, status), from, size);
             default:
                 throw new UnsupportedException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
-    public List<BookingRequestDto> getBookingsByOwnerItem(int userId, StateBooking state) {
+    public List<BookingRequestDto> getBookingsByOwnerItem(int userId, StateBooking state, Integer from, Integer size) {
         checkUser(userId);
 
         LocalDateTime date = LocalDateTime.now();
@@ -126,21 +126,20 @@ public class BookingServiceImpl implements BookingService {
 
         switch (state) {
             case ALL:
-                return response(bookingStorage.findAllByItemOwnerId(userId));
+                return response(bookingStorage.findAllByItemOwnerId(userId), from, size);
             case PAST:
-                return response(bookingStorage.findByItemOwnerIdAndEndBefore(userId, date));
+                return response(bookingStorage.findByItemOwnerIdAndEndBefore(userId, date), from, size);
             case FUTURE:
-                return response(bookingStorage.findByItemOwnerIdAndStartAfter(userId, date));
+                return response(bookingStorage.findByItemOwnerIdAndStartAfter(userId, date), from, size);
             case CURRENT:
-                return response(bookingStorage.findByItemOwnerIdAndStartBeforeAndEndAfter(userId, date, date));
+                return response(bookingStorage.findByItemOwnerIdAndStartBeforeAndEndAfter(userId, date, date), from, size);
             case WAITING:
                 status = StatusBooking.WAITING;
-                return response(bookingStorage.findByItemOwnerIdAndStatus(userId, status));
+                return response(bookingStorage.findByItemOwnerIdAndStatus(userId, status), from, size);
             case REJECTED:
                 status = StatusBooking.REJECTED;
-                return response(bookingStorage.findByItemOwnerIdAndStatus(userId, status));
-            default:
-                throw new UnsupportedException("Unknown state: UNSUPPORTED_STATUS");
+                return response(bookingStorage.findByItemOwnerIdAndStatus(userId, status), from, size);
+            default:                throw new UnsupportedException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
@@ -197,19 +196,35 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new ObjectNotFoundException("booking id - " + bookingId + " not found"));
     }
 
-    private List<BookingRequestDto> response(List<Booking> bookings) {
-        return bookings.stream()
-                .sorted((o1, o2) -> {
-                    if (o1.getEnd().isEqual(o2.getEnd())) {
-                        return 0;
-                    } else if (o1.getEnd().isBefore(o2.getEnd())) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                })
-                .map(bookingMapper::toBookingRequestDto)
-                .collect(Collectors.toList());
+    private List<BookingRequestDto> response(List<Booking> bookings, Integer from, Integer size) {
+        if (from == null && size == null) {
+            return bookings.stream()
+                    .sorted((o1, o2) -> {
+                        if (o1.getEnd().isEqual(o2.getEnd())) {
+                            return 0;
+                        } else if (o1.getEnd().isBefore(o2.getEnd())) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    })
+                    .map(bookingMapper::toBookingRequestDto)
+                    .collect(Collectors.toList());
+        } else {
+            return bookings.stream()
+                    .sorted((o1, o2) -> {
+                        if (o1.getEnd().isEqual(o2.getEnd())) {
+                            return 0;
+                        } else if (o1.getEnd().isBefore(o2.getEnd())) {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    })
+                    .skip(from)
+                    .limit(size)
+                    .map(bookingMapper::toBookingRequestDto)
+                    .collect(Collectors.toList());
+        }
     }
-
 }

@@ -7,7 +7,7 @@ import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.storage.db.CommentStorage;
+import ru.practicum.shareit.item.storage.CommentStorage;
 import ru.practicum.shareit.user.service.UserService;
 
 @Service

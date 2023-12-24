@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -38,8 +39,9 @@ public class Item {
     @Column(name = "owner_id")
     private int ownerId;
 
-    @Column(name = "request_id")
-    private Integer requestId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
 
     public Item(int id, String name, String description, Boolean available) {
         this.id = id;
@@ -57,7 +59,7 @@ public class Item {
                 "         description = " + description + "\n" +
                 "         available = " + available + "\n" +
                 "         ownerId = " + ownerId + "\n" +
-                "         request = " + requestId + "\n" +
+                "         request = " + request + "\n" +
                 "        }";
     }
 }
