@@ -9,11 +9,11 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithBookingCommentDto;
 import ru.practicum.shareit.item.dto.ItemWithBookingDto;
-import ru.practicum.shareit.item.service.CommentService;
+import ru.practicum.shareit.item.service.CommentServiceImpl;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.util.List;
 
 /**
@@ -25,16 +25,16 @@ import java.util.List;
 @RequestMapping(path = "/items")
 public class ItemController {
     private final ItemService itemService;
-    private final CommentService commentService;
+    private final CommentServiceImpl commentServiceImpl;
     private static final String UserId = "X-Sharer-User-Id";
     private static final String ItemId = "/{itemId}";
     private static final String Search = "/search";
     private static final String Comment = "/comment";
 
     @Autowired
-    ItemController(@Qualifier("ItemServiceImpl") ItemService itemService, CommentService commentService) {
+    ItemController(@Qualifier("ItemServiceImpl") ItemService itemService, CommentServiceImpl commentServiceImpl) {
         this.itemService = itemService;
-        this.commentService = commentService;
+        this.commentServiceImpl = commentServiceImpl;
     }
 
     @PostMapping
@@ -52,14 +52,15 @@ public class ItemController {
                                  @Valid @RequestBody CommentDto commentDto) {
         log.info("request POST/addComment : {}, {}, {}", userId, itemId, commentDto);
 
-        CommentDto responseObject = commentService.addComment(userId, itemId, commentDto);
+        CommentDto responseObject = commentServiceImpl.addComment(userId, itemId, commentDto);
         log.info("response POST/addComment : {}", responseObject);
 
         return responseObject;
     }
 
     @GetMapping(ItemId)
-    public ItemWithBookingCommentDto getItemById(@Positive @RequestHeader(UserId) Integer userId, @PathVariable int itemId) {
+    public ItemWithBookingCommentDto getItemById(@Positive @RequestHeader(UserId) Integer userId,
+                                                 @PathVariable int itemId) {
         log.info("request GET/getItemById : {}, {}", userId, itemId);
 
         ItemWithBookingCommentDto responseObject = itemService.getItemById(userId, itemId);
@@ -69,20 +70,26 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemWithBookingDto> getItemsByUserId(@Positive @RequestHeader(UserId) Integer userId) {
-        log.info("request GET/getAllItemsByUserId: {}", userId);
+    public List<ItemWithBookingDto> getItemsByOwnerId(@Positive @RequestHeader(UserId) Integer userId,
+                @RequestParam(value = "from", required = false, defaultValue = "0") @Min(0) Integer from,
+                @RequestParam(value = "size", required = false, defaultValue = "20") @Min(1) @Max(20) Integer size) {
+        log.info("request GET/getAllItemsByUserId: {}, {}, {}", userId, from, size);
 
-        List<ItemWithBookingDto> responseObject = itemService.getItemsByOwnerId(userId);
+        List<ItemWithBookingDto> responseObject = itemService.getItemsByOwnerId(userId, from, size);
         log.info("response GET/getAllItemsByUserId: {}", responseObject);
 
         return responseObject;
     }
 
     @GetMapping(Search)
-    public List<ItemDto> getItemByString(@Positive @RequestHeader(UserId) Integer userId, @RequestParam String text) {
-        log.info("request GET/getItemByString: {}, {}", userId, text);
+    public List<ItemDto> getItemByString(@Positive @RequestHeader(UserId) Integer userId,
+                  @RequestParam String text,
+                  @RequestParam(value = "from", required = false, defaultValue = "0") @Min(0) Integer from,
+                  @RequestParam(value = "size", required = false, defaultValue = "20") @Min(1) @Max(20) Integer size) {
 
-        List<ItemDto> responseObject = itemService.getItemByString(userId, text);
+        log.info("request GET/getItemByString: {}, {}, {}, {}", userId, text, from, size);
+
+        List<ItemDto> responseObject = itemService.getItemByString(userId, text, from, size);
         log.info("response GET/getItemByString: {}", responseObject);
 
         return responseObject;

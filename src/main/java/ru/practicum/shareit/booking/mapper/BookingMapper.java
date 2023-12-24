@@ -2,7 +2,7 @@ package ru.practicum.shareit.booking.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.dto.ItemBookingDto;
 import ru.practicum.shareit.booking.dto.UserBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
@@ -32,30 +32,16 @@ public class BookingMapper {
         return booking;
     }
 
-    public BookingDto toBookingDto(Booking booking) {
-        BookingDto bookingDto = new BookingDto();
+    public BookingResponseDto toBookingRequestDto(Booking booking) {
+        BookingResponseDto bookingResponseDto = new BookingResponseDto();
 
-        bookingDto.setId(booking.getId());
-        bookingDto.setStart(booking.getStart());
-        bookingDto.setEnd(booking.getEnd());
-        bookingDto.setStatus(booking.getStatus());
-        bookingDto.setBookerId(booking.getUser().getId());
-        bookingDto.setItemId(booking.getItem().getId());
-        bookingDto.setItemName(booking.getItem().getName());
+        bookingResponseDto.setId(booking.getId());
+        bookingResponseDto.setStart(booking.getStart());
+        bookingResponseDto.setEnd(booking.getEnd());
+        bookingResponseDto.setStatus(booking.getStatus());
+        bookingResponseDto.setBooker(new UserBookingDto(booking.getUser().getId()));
+        bookingResponseDto.setItem(new ItemBookingDto(booking.getItem().getId(), booking.getItem().getName()));
 
-        return bookingDto;
-    }
-
-    public BookingRequestDto toBookingRequestDto(Booking booking) {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto();
-
-        bookingRequestDto.setId(booking.getId());
-        bookingRequestDto.setStart(booking.getStart());
-        bookingRequestDto.setEnd(booking.getEnd());
-        bookingRequestDto.setStatus(booking.getStatus());
-        bookingRequestDto.setBooker(new UserBookingDto(booking.getUser().getId()));
-        bookingRequestDto.setItem(new ItemBookingDto(booking.getItem().getId(), booking.getItem().getName()));
-
-        return bookingRequestDto;
+        return bookingResponseDto;
     }
 }
