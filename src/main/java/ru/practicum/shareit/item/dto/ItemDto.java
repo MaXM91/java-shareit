@@ -26,6 +26,8 @@ public class ItemDto {
     @NotNull(message = "availability must be true/false")
     private Boolean available;
 
+    private Integer requestId;
+
     @Override
     public String toString() {
         return "\n" +
@@ -34,6 +36,7 @@ public class ItemDto {
                "            name = " + name + "\n" +
                "            description = " + description + "\n" +
                "            available = " + available + "\n" +
+               "            requestId = " + requestId + "\n" +
                "           }";
     }
 }

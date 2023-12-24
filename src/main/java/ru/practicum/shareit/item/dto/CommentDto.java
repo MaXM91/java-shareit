@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Builder
 @Getter
@@ -28,7 +29,7 @@ public class CommentDto {
                 "               id = " + id + "\n" +
                 "               text = " + text + "\n" +
                 "               authorName = " + authorName + "\n" +
-                "               created = " + created + "\n" +
+                "               created = " + created.truncatedTo(ChronoUnit.SECONDS) + "\n" +
                 "              }";
     }
 }

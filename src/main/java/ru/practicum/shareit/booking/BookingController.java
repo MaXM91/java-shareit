@@ -8,6 +8,8 @@ import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -50,10 +52,12 @@ public class BookingController {
 
     @GetMapping
     public List<BookingRequestDto> getBookingsByUserId(@Positive @RequestHeader(UserId) Integer userId,
-             @NotNull(message = "state must not be null") @RequestParam(defaultValue = "ALL") StateBooking state) {
-        log.info("request GET/getBookingsByUserId : {}, {}", userId, state);
+                    @NotNull(message = "state must not be null") @RequestParam(defaultValue = "ALL") StateBooking state,
+                    @RequestParam(value = "from", required = false) @Min(0) Integer from,
+                    @RequestParam(value = "size", required = false) @Min(1) @Max(20) Integer size) {
+        log.info("request GET/getBookingsByUserId : {}, {}, {}, {}", userId, state, from, size);
 
-        List<BookingRequestDto> responseObject = bookingService.getBookingsByUserId(userId, state);
+        List<BookingRequestDto> responseObject = bookingService.getBookingsByUserId(userId, state, from, size);
         log.info("response GET/getBookingsByUserId : {}", responseObject);
 
         return responseObject;
@@ -61,17 +65,20 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingRequestDto> getBookingsByOwnerItem(@Positive @RequestHeader(UserId) Integer userId,
-             @NotNull(message = "state must not be null") @RequestParam(defaultValue = "ALL") StateBooking state) {
-        log.info("request GET/getBookingsByOwnerItem : {}, {}", userId, state);
+                    @NotNull(message = "state must not be null") @RequestParam(defaultValue = "ALL") StateBooking state,
+                    @RequestParam(value = "from", required = false) @Min(0) Integer from,
+                    @RequestParam(value = "size", required = false) @Min(1) @Max(20) Integer size) {
+        log.info("request GET/getBookingsByOwnerItem : {}, {}, {}, {}", userId, state, from, size);
 
-        List<BookingRequestDto> responseObject = bookingService.getBookingsByOwnerItem(userId, state);
+        List<BookingRequestDto> responseObject = bookingService.getBookingsByOwnerItem(userId, state, from, size);
         log.info("response GET/getBookingsByOwnerItem : {}", responseObject);
 
         return responseObject;
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingRequestDto changeStatusBooking(@Positive @RequestHeader(UserId) Integer userId, @PathVariable Integer bookingId,
+    public BookingRequestDto changeStatusBooking(@Positive @RequestHeader(UserId) Integer userId,
+                                                 @PathVariable Integer bookingId,
                                                  @RequestParam boolean approved) {
         log.info("request PATCH/changeStatusBooking : {}, {}", bookingId, approved);
 

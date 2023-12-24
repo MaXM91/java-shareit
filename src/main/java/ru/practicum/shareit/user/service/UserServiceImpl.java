@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.db.UserStorage;
+import ru.practicum.shareit.user.storage.UserStorage;
 import ru.practicum.shareit.validation.exceptions.EmailRegisteredException;
 import ru.practicum.shareit.validation.exceptions.ObjectNotFoundException;
 
@@ -31,7 +31,8 @@ public class UserServiceImpl implements UserService {
     public UserDto addUser(UserDto userDto) {
         User user = userMapper.toUser(userDto);
 
-        return userMapper.toUserDto(userStorage.save(user));
+        user = userStorage.save(user);
+        return userMapper.toUserDto(user);
     }
 
     @Override

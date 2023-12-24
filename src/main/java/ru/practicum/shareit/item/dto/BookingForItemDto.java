@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Builder
 @Getter
@@ -23,8 +24,8 @@ public class BookingForItemDto {
                 "   BookingForItemDto{\n" +
                 "                     id = " + id + "\n" +
                 "                     bookerId = " + bookerId + "\n" +
-                "                     start = " + start + "\n" +
-                "                     end = " + end + "\n" +
+                "                     start = " + start.truncatedTo(ChronoUnit.SECONDS) + "\n" +
+                "                     end = " + end.truncatedTo(ChronoUnit.SECONDS) + "\n" +
                 "                     itemId = " + itemId + "\n" +
                 "                    }";
     }

@@ -30,23 +30,6 @@ public class ItemWithBookingCommentDto {
 
     private List<CommentDto> comments;
 
-    public ItemWithBookingCommentDto(int id, String name, String description, Boolean available) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.available = available;
-    }
-
-    public ItemWithBookingCommentDto(int id, String name, String description, Boolean available,
-                                     BookingForItemDto lastBooking, BookingForItemDto nextBooking) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.available = available;
-        this.lastBooking = lastBooking;
-        this.nextBooking = nextBooking;
-    }
-
     @Override
     public String toString() {
         return "\n" +
