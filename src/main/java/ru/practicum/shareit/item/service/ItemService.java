@@ -14,9 +14,9 @@ public interface ItemService {
 
     Item getItemEntityById(Integer itemId);
 
-    List<ItemWithBookingDto> getItemsByOwnerId(int userId);
+    List<ItemWithBookingDto> getItemsByOwnerId(int userId, Integer from, Integer size);
 
-    List<ItemDto> getItemByString(int userId, String text);
+    List<ItemDto> getItemByString(int userId, String text, Integer from, Integer size);
 
     ItemDto update(int userId, int itemId, ItemDto itemDto);
 

@@ -13,7 +13,7 @@ import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.util.List;
 
 /**
@@ -69,20 +69,26 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemWithBookingDto> getItemsByUserId(@Positive @RequestHeader(UserId) Integer userId) {
-        log.info("request GET/getAllItemsByUserId: {}", userId);
+    public List<ItemWithBookingDto> getItemsByOwnerId(@Positive @RequestHeader(UserId) Integer userId,
+                                       @RequestParam(value = "from", required = false) @Min(0) Integer from,
+                                       @RequestParam(value = "size", required = false) @Min(1) @Max(20) Integer size) {
+        log.info("request GET/getAllItemsByUserId: {}, {}, {}", userId, from, size);
 
-        List<ItemWithBookingDto> responseObject = itemService.getItemsByOwnerId(userId);
+        List<ItemWithBookingDto> responseObject = itemService.getItemsByOwnerId(userId, from, size);
         log.info("response GET/getAllItemsByUserId: {}", responseObject);
 
         return responseObject;
     }
 
     @GetMapping(Search)
-    public List<ItemDto> getItemByString(@Positive @RequestHeader(UserId) Integer userId, @RequestParam String text) {
-        log.info("request GET/getItemByString: {}, {}", userId, text);
+    public List<ItemDto> getItemByString(@Positive @RequestHeader(UserId) Integer userId,
+                                        @RequestParam String text,
+                                        @RequestParam(value = "from", required = false) @Min(0) Integer from,
+                                        @RequestParam(value = "size", required = false) @Min(1) @Max(20) Integer size) {
 
-        List<ItemDto> responseObject = itemService.getItemByString(userId, text);
+        log.info("request GET/getItemByString: {}, {}, {}, {}", userId, text, from, size);
+
+        List<ItemDto> responseObject = itemService.getItemByString(userId, text, from, size);
         log.info("response GET/getItemByString: {}", responseObject);
 
         return responseObject;

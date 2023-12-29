@@ -27,13 +27,6 @@ public class ItemWithBookingDto {
 
     private BookingForItemDto nextBooking;
 
-    public ItemWithBookingDto(int id, String name, String description, Boolean available) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.available = available;
-    }
-
     @Override
     public String toString() {
         return "\n" +

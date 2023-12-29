@@ -4,6 +4,7 @@ import lombok.*;
 import ru.practicum.shareit.booking.StatusBooking;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 
 @Builder
@@ -30,8 +31,8 @@ public class BookingRequestDto {
         return "\n" +
                 "    BookingRequestDto{\n" +
                 "                      id = " + id + "\n" +
-                "                      start = " + start + "\n" +
-                "                      end = " + end + "\n" +
+                "                      start = " + start.truncatedTo(ChronoUnit.SECONDS) + "\n" +
+                "                      end = " + end.truncatedTo(ChronoUnit.SECONDS) + "\n" +
                 "                      status = " + status + "\n" +
                 "                      user = " + booker + "\n" +
                 "                      item = " + item + "\n" +
