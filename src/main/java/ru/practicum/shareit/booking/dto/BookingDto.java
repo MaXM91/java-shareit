@@ -8,6 +8,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * bookingsDto.
@@ -43,8 +44,8 @@ public class BookingDto {
         return "\n" +
                 "    bookingDto{\n" +
                 "               id = " + id + "\n" +
-                "               start = " + start + "\n" +
-                "               end = " + end + "\n" +
+                "               start = " + start.truncatedTo(ChronoUnit.SECONDS) + "\n" +
+                "               end = " + end.truncatedTo(ChronoUnit.SECONDS) + "\n" +
                 "               status = " + status + "\n" +
                 "               bookerId = " + bookerId + "\n" +
                 "               itemId = " + itemId + "\n" +
